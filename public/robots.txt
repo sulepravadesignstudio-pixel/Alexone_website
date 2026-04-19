@@ -1,0 +1,5 @@
+# Replace the sitemap URL with your live origin if different (or set VITE_SITE_URL in the app).
+User-agent: *
+Allow: /
+
+Sitemap: https://alexone.design/sitemap.xml
