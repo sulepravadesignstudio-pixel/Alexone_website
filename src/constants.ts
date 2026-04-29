@@ -96,7 +96,7 @@ export const RESIDENTIAL_PANORAMA_SCENES: ResidentialScene[] = [
     id: 'feature-wall',
     label: 'Feature Wall',
     title: 'Statement Detail View',
-    image: living01,
+    image: living03,
     summary: 'Focus on the hero surfaces that define the room through wood ribs, gloss panels, and integrated fire detail.',
     hotspots: [
       {
