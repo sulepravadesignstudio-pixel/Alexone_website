@@ -1,6 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'motion/react';
-import { ArrowRight, ChevronLeft, Info, Maximize2, Minus, X } from 'lucide-react';
+import { Suspense, useEffect, useState } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { Loader } from '@react-three/drei';
+import { AnimatePresence, motion } from 'motion/react';
+import { ArrowRight, ChevronLeft, Info, Minus, X } from 'lucide-react';
+import Panorama from './Panorama';
 import { RESIDENTIAL_PANORAMA_SCENES, type ResidentialHotspot } from '../constants';
 
 type ImmersiveView = 'preview' | 'entering' | 'tour';
@@ -10,20 +13,10 @@ export default function ResidentialImmersive() {
   const [activeSceneId, setActiveSceneId] = useState(RESIDENTIAL_PANORAMA_SCENES[0].id);
   const [focusedHotspot, setFocusedHotspot] = useState<string | null>(null);
   const [showInfo, setShowInfo] = useState(true);
-  const tourRef = useRef<HTMLDivElement>(null);
 
   const activeScene =
     RESIDENTIAL_PANORAMA_SCENES.find(s => s.id === activeSceneId) ??
     RESIDENTIAL_PANORAMA_SCENES[0];
-
-  // Mouse parallax (normalised 0–1, centre = 0.5)
-  const rawX = useMotionValue(0.5);
-  const rawY = useMotionValue(0.5);
-  const smoothX = useSpring(rawX, { stiffness: 40, damping: 18 });
-  const smoothY = useSpring(rawY, { stiffness: 40, damping: 18 });
-  // Shift the oversized image layer ±2.5% based on mouse
-  const imgX = useTransform(smoothX, [0, 1], ['-2.5%', '2.5%']);
-  const imgY = useTransform(smoothY, [0, 1], ['-2%', '2%']);
 
   /* lock scroll while tour is open */
   useEffect(() => {
@@ -47,23 +40,10 @@ export default function ResidentialImmersive() {
   const handleSceneChange = (id: string) => {
     setFocusedHotspot(null);
     setActiveSceneId(id);
-    rawX.set(0.5);
-    rawY.set(0.5);
   };
 
-  const handleHotspotClick = (h: ResidentialHotspot) => {
-    const next = focusedHotspot === h.id ? null : h.id;
-    setFocusedHotspot(next);
-    // snap parallax to centre so it doesn't fight the zoom origin
-    if (next) { rawX.set(0.5); rawY.set(0.5); }
-  };
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (focusedHotspot) return; // don't drift while zoomed into a hotspot
-    const r = e.currentTarget.getBoundingClientRect();
-    rawX.set((e.clientX - r.left) / r.width);
-    rawY.set((e.clientY - r.top) / r.height);
-  };
+  const handleHotspotClick = (h: ResidentialHotspot) =>
+    setFocusedHotspot(cur => (cur === h.id ? null : h.id));
 
   const focusedData = activeScene.hotspots.find(h => h.id === focusedHotspot) ?? null;
 
@@ -87,7 +67,7 @@ export default function ResidentialImmersive() {
           {/* ── LEFT: text + CTA ── */}
           <div className="flex flex-col justify-center px-8 py-12 md:px-12 md:py-16">
             <p className="text-[10px] uppercase tracking-[0.48em] text-luxury-gold mb-5">
-              Residential Immersive Experience
+              Residential 3D Experience
             </p>
             <h3 className="font-serif text-white leading-tight"
               style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', fontWeight: 300 }}>
@@ -95,8 +75,8 @@ export default function ResidentialImmersive() {
               <span className="italic text-luxury-gold">Residence</span>
             </h3>
             <p className="mt-6 max-w-sm text-white/55 font-light leading-relaxed text-[0.9rem]">
-              Choose a room below, hit Enter, and explore your renders in crisp full-screen
-              with interactive design hotspots.
+              A cinematic entry inspired by the reference lander. Choose a room below, hit Enter,
+              and explore your renders in full immersive view with interactive hotspots.
             </p>
 
             {/* Room tab switcher */}
@@ -108,7 +88,7 @@ export default function ResidentialImmersive() {
                   onClick={() => handleSceneChange(scene.id)}
                   className={`px-5 py-2 text-[10px] uppercase tracking-[0.28em] border rounded-full transition-all duration-300 ${
                     activeSceneId === scene.id
-                      ? 'bg-luxury-gold border-luxury-gold text-white'
+                      ? 'bg-luxury-gold border-luxury-gold text-luxury-black'
                       : 'border-white/20 text-white/55 hover:border-luxury-gold/50 hover:text-white'
                   }`}
                 >
@@ -122,15 +102,15 @@ export default function ResidentialImmersive() {
               <button
                 type="button"
                 onClick={handleEnter}
-                className="group inline-flex items-center gap-3 bg-luxury-gold px-8 py-4 text-[10px] uppercase tracking-[0.38em] text-white transition-all hover:scale-[1.03] hover:bg-[#b8963a]"
+                className="group inline-flex items-center gap-3 bg-luxury-gold px-8 py-4 text-[10px] uppercase tracking-[0.38em] text-luxury-black transition-all hover:scale-[1.03] hover:bg-[#c8c84e]"
               >
-                Enter Immersive View
+                Enter 3D View
                 <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
               </button>
             </div>
           </div>
 
-          {/* ── RIGHT: stacked thumbnails ── */}
+          {/* ── RIGHT: 3 stacked thumbnails ── */}
           <div className="hidden lg:flex items-stretch gap-0">
             {RESIDENTIAL_PANORAMA_SCENES.map((scene, idx) => (
               <motion.button
@@ -152,10 +132,11 @@ export default function ResidentialImmersive() {
                 />
                 <div className={`absolute inset-0 transition-all duration-500 ${
                   activeSceneId === scene.id
-                    ? 'bg-black/25'
-                    : 'bg-black/55 hover:bg-black/30'
+                    ? 'bg-luxury-black/25'
+                    : 'bg-luxury-black/55 hover:bg-luxury-black/30'
                 }`} />
 
+                {/* Label */}
                 <div className="absolute inset-x-0 bottom-0 p-6">
                   <p className="text-[9px] uppercase tracking-[0.4em] text-luxury-gold mb-2">
                     {String(idx + 1).padStart(2, '0')}
@@ -168,7 +149,7 @@ export default function ResidentialImmersive() {
 
                 {activeSceneId === scene.id && (
                   <div className="absolute top-4 right-4 flex h-7 w-7 items-center justify-center rounded-full bg-luxury-gold">
-                    <div className="h-2 w-2 rounded-full bg-white" />
+                    <div className="h-2 w-2 rounded-full bg-luxury-black" />
                   </div>
                 )}
               </motion.button>
@@ -176,11 +157,11 @@ export default function ResidentialImmersive() {
           </div>
         </div>
 
-        {/* Bottom strip */}
+        {/* Bottom strip: drag hint */}
         <div className="relative z-10 border-t border-white/5 px-8 py-4 md:px-12 flex items-center gap-6">
           <div className="h-px flex-1 bg-white/5" />
           <p className="text-[9px] uppercase tracking-[0.4em] text-white/25">
-            Select a room · Enter view · Move mouse to look around · Click pins for details
+            Select a room · Enter 3D · Drag to look around · Click pins for details
           </p>
           <div className="h-px flex-1 bg-white/5" />
         </div>
@@ -213,85 +194,17 @@ export default function ResidentialImmersive() {
         )}
       </AnimatePresence>
 
-      {/* ── TOUR (full-screen crisp image viewer) ── */}
+      {/* ── TOUR (full-screen panorama) ── */}
       <AnimatePresence>
         {view === 'tour' && (
           <motion.div
             key="residential-tour"
-            ref={tourRef}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[230] overflow-hidden bg-black"
-            onMouseMove={handleMouseMove}
+            className="fixed inset-0 z-[230] bg-black"
           >
-            {/* ─── Image layer: slightly oversized so parallax shift never shows edges ─── */}
-            <motion.div
-              className="absolute"
-              style={{
-                inset: '-5%',
-                width: '110%',
-                height: '110%',
-                x: focusedHotspot ? '0%' : imgX,
-                y: focusedHotspot ? '0%' : imgY,
-                transformOrigin: focusedData
-                  ? `${focusedData.left} ${focusedData.top}`
-                  : 'center center',
-              }}
-              animate={{ scale: focusedData ? 1.8 : 1.0 }}
-              transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
-            >
-              <img
-                key={activeScene.id}
-                src={activeScene.image}
-                alt={activeScene.title}
-                className="h-full w-full object-cover select-none"
-                draggable={false}
-                style={{ imageRendering: 'auto' }}
-              />
-            </motion.div>
-
-            {/* Subtle vignette overlay */}
-            <div
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background: 'radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.45) 100%)',
-              }}
-            />
-
-            {/* ─── Hotspot pins ─── */}
-            {activeScene.hotspots.map((hotspot) => (
-              <AnimatePresence key={hotspot.id}>
-                {(!focusedHotspot || focusedHotspot === hotspot.id) && (
-                  <motion.button
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0, opacity: 0 }}
-                    type="button"
-                    className={`group absolute z-[50] flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full shadow-2xl transition-all duration-300 ${
-                      focusedHotspot === hotspot.id ? 'bg-white' : 'bg-[#C9A84C]'
-                    }`}
-                    style={{ left: hotspot.left, top: hotspot.top }}
-                    onClick={() => handleHotspotClick(hotspot)}
-                  >
-                    {focusedHotspot === hotspot.id
-                      ? <X size={16} className="text-black" />
-                      : <Maximize2 size={16} className="text-black" />
-                    }
-                    {!focusedHotspot && (
-                      <>
-                        <span className="absolute inset-0 animate-ping rounded-full bg-[#C9A84C] opacity-70" />
-                        <span className="pointer-events-none absolute left-14 top-1/2 -translate-y-1/2 translate-x-4 whitespace-nowrap rounded-sm border border-[#C9A84C]/30 bg-black/85 px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-[#C9A84C] opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
-                          {hotspot.title}
-                        </span>
-                      </>
-                    )}
-                  </motion.button>
-                )}
-              </AnimatePresence>
-            ))}
-
-            {/* ─── HUD top ─── */}
+            {/* HUD top */}
             <div className="pointer-events-none absolute inset-x-0 top-0 z-[100] flex items-start justify-between p-6 md:p-8">
               <div className="pointer-events-auto flex flex-col gap-4">
                 <button
@@ -335,7 +248,7 @@ export default function ResidentialImmersive() {
                   onClick={() => setShowInfo(c => !c)}
                   title="Toggle Info"
                   className={`rounded-full border border-white/10 p-3 backdrop-blur-md transition-all ${
-                    showInfo ? 'bg-luxury-gold text-white' : 'bg-black/40 text-white hover:bg-white/10'
+                    showInfo ? 'bg-luxury-gold text-luxury-black' : 'bg-black/40 text-white hover:bg-white/10'
                   }`}
                 >
                   <Info size={18} />
@@ -350,7 +263,32 @@ export default function ResidentialImmersive() {
               </div>
             </div>
 
-            {/* ─── Info panel ─── */}
+            {/* Three.js canvas */}
+            <div className="absolute inset-0 z-0">
+              <Canvas
+                camera={{ position: [0, 0, 0.1], fov: 70 }}
+                dpr={[1, 2]}
+                gl={{ antialias: true, powerPreference: 'high-performance' }}
+              >
+                <Suspense fallback={null}>
+                  <Panorama
+                    key={activeScene.id}
+                    imageUrl={activeScene.image}
+                    hotspots={activeScene.hotspots}
+                    focusedHotspot={focusedHotspot}
+                    onHotspotClick={handleHotspotClick}
+                  />
+                </Suspense>
+              </Canvas>
+              <Loader
+                containerStyles={{ background: 'rgba(0,0,0,0.8)' }}
+                innerStyles={{ background: '#b4b43c' }}
+                barStyles={{ background: '#b4b43c' }}
+                dataStyles={{ color: '#b4b43c' }}
+              />
+            </div>
+
+            {/* Info panel */}
             <AnimatePresence>
               {showInfo && !focusedHotspot && (
                 <motion.div
@@ -371,14 +309,14 @@ export default function ResidentialImmersive() {
                       {activeScene.summary}
                     </p>
                     <p className="mt-6 border-t border-white/8 pt-5 text-[9px] uppercase tracking-[0.38em] text-white/30">
-                      Move mouse to look · Click pins for details
+                      Drag · Scroll to zoom · Tap pins
                     </p>
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* ─── Hotspot detail callout ─── */}
+            {/* Hotspot detail callout */}
             <AnimatePresence>
               {focusedData && (
                 <motion.div
@@ -403,18 +341,18 @@ export default function ResidentialImmersive() {
                       onClick={() => setFocusedHotspot(null)}
                       className="mt-6 flex items-center gap-2 text-[9px] uppercase tracking-[0.3em] text-white/35 hover:text-luxury-gold transition-colors"
                     >
-                      <Minus size={12} /> Return to view
+                      <Minus size={12} /> Return to panorama
                     </button>
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* ─── Bottom hint ─── */}
+            {/* Bottom drag hint */}
             {!focusedHotspot && (
               <div className="absolute bottom-8 left-1/2 z-[110] flex -translate-x-1/2 items-center gap-4 text-[9px] uppercase tracking-[0.48em] text-white/30">
                 <div className="h-px w-10 bg-white/10" />
-                Move Mouse To Look Around
+                Drag To Look Around
                 <div className="h-px w-10 bg-white/10" />
               </div>
             )}
@@ -424,3 +362,4 @@ export default function ResidentialImmersive() {
     </>
   );
 }
+
