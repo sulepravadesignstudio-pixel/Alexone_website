@@ -15,16 +15,16 @@ interface PanoramaProps {
 
 export default function Panorama({ imageUrl, hotspots, focusedHotspot, onHotspotClick }: PanoramaProps) {
   const texture = useTexture(imageUrl);
-  const { camera } = useThree();
+  const { camera, gl } = useThree();
 
   useLayoutEffect(() => {
     texture.colorSpace = THREE.SRGBColorSpace;
-    texture.minFilter = THREE.LinearFilter;
+    texture.minFilter = THREE.LinearMipmapLinearFilter;
     texture.magFilter = THREE.LinearFilter;
-    texture.generateMipmaps = false;
-    texture.anisotropy = 16;
+    texture.generateMipmaps = true;
+    texture.anisotropy = Math.max(4, gl.capabilities.getMaxAnisotropy());
     texture.needsUpdate = true;
-  }, [texture]);
+  }, [texture, gl]);
 
   useFrame(() => {
     const perspectiveCamera = camera as THREE.PerspectiveCamera;
@@ -83,14 +83,14 @@ export default function Panorama({ imageUrl, hotspots, focusedHotspot, onHotspot
               animate={{ scale: 1, opacity: 1 }}
               className={`group relative flex h-10 w-10 items-center justify-center rounded-full shadow-2xl transition-all duration-500 ${
                 focusedHotspot && focusedHotspot !== hotspot.id ? 'pointer-events-none opacity-0' : 'opacity-100'
-              } ${focusedHotspot === hotspot.id ? 'bg-white' : 'bg-[#C9A84C]'}`}
+              } ${focusedHotspot === hotspot.id ? 'bg-white' : 'bg-[#b4b43c]'}`}
               onClick={() => onHotspotClick(hotspot)}
             >
               {focusedHotspot === hotspot.id ? <X size={16} className="text-black" /> : <Maximize2 size={16} className="text-black" />}
               {!focusedHotspot && (
                 <>
-                  <span className="absolute inset-0 animate-ping rounded-full bg-[#C9A84C]" />
-                  <span className="pointer-events-none absolute left-14 top-1/2 -translate-y-1/2 translate-x-4 rounded-sm border border-[#C9A84C]/30 bg-black/85 px-4 py-2 text-[10px] uppercase tracking-[0.2em] whitespace-nowrap text-[#C9A84C] opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
+                  <span className="absolute inset-0 animate-ping rounded-full bg-[#b4b43c]" />
+                  <span className="pointer-events-none absolute left-14 top-1/2 -translate-y-1/2 translate-x-4 rounded-sm border border-[#b4b43c]/30 bg-black/85 px-4 py-2 text-[10px] uppercase tracking-[0.2em] whitespace-nowrap text-[#b4b43c] opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
                     {hotspot.title}
                   </span>
                 </>
@@ -102,3 +102,4 @@ export default function Panorama({ imageUrl, hotspots, focusedHotspot, onHotspot
     </>
   );
 }
+
