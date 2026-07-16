@@ -2,7 +2,6 @@ import { motion } from 'motion/react';
 import { RAIL_TEXT_INSET } from '../layoutRail';
 import { PROJECTS, CATEGORIES, RESIDENTIAL_HERO_IMAGE } from '../constants';
 import { ArrowRight, MapPin, Phone, Sparkles, Star, MoveRight } from 'lucide-react';
-import alexoneWordmark from '../assets/alexone-wordmark.svg';
 
 interface HomeProps {
   onNavigate: (page: string) => void;
@@ -76,9 +75,9 @@ export default function Home({ onNavigate }: HomeProps) {
               className="mb-8"
             >
               <img
-                src={alexoneWordmark}
+                src="/favicon-removebg-preview.png"
                 alt="Alexone"
-                className="h-14 w-auto drop-shadow-[0_8px_28px_rgba(0,0,0,0.55)] md:h-20"
+                className="h-20 w-auto max-w-[min(92vw,420px)] object-contain drop-shadow-[0_8px_28px_rgba(0,0,0,0.55)] md:h-[6.5rem]"
               />
             </motion.div>
 

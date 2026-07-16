@@ -19,7 +19,7 @@ export default function EntryScreen({ onEnter }: EntryScreenProps) {
   }, [exiting, onEnter]);
 
   useEffect(() => {
-    const autoEnterTimer = window.setTimeout(handleEnter, 10000);
+    const autoEnterTimer = window.setTimeout(handleEnter, 30000);
     return () => window.clearTimeout(autoEnterTimer);
   }, [handleEnter]);
 
@@ -117,7 +117,7 @@ export default function EntryScreen({ onEnter }: EntryScreenProps) {
                   initial={{ opacity: 0, y: -24, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   transition={{ duration: 0.8, delay: 0.25 }}
-                  className="mb-5 h-[5.5rem] w-auto max-w-[min(92vw,420px)] object-contain drop-shadow-[0_12px_40px_rgba(0,0,0,0.55)] sm:mb-6 sm:h-[6.5rem] md:h-[7.5rem]"
+                  className="mb-5 h-[6.5rem] w-auto max-w-[min(92vw,480px)] object-contain drop-shadow-[0_12px_40px_rgba(0,0,0,0.55)] sm:mb-6 sm:h-[7.5rem] md:h-[8.5rem]"
                 />
 
                 <div
@@ -158,8 +158,8 @@ export default function EntryScreen({ onEnter }: EntryScreenProps) {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.9, delay: 1.2 }}
-                  className="mb-4 text-[10px] uppercase font-light text-[#E2C97E] sm:mb-6 sm:text-[11px]"
-                  style={{ letterSpacing: '0.35em' }}
+                  className="mb-5 text-lg uppercase font-medium text-[#E2C97E] sm:mb-7 sm:text-xl md:text-2xl"
+                  style={{ letterSpacing: '0.28em' }}
                 >
                   By Suleprava Interior &amp; Exterior Design
                 </motion.p>

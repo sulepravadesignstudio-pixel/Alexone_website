@@ -55,7 +55,7 @@ export default function Navbar({ onNavigate, currentPage, onGoBack, onOpenEnquir
           <img
             src="/favicon-removebg-preview.png"
             alt="Alexone"
-            className={`object-contain transition-all duration-300 ${isScrolled ? 'h-14 md:h-16' : 'h-16 md:h-[4.75rem]'}`}
+            className={`object-contain transition-all duration-300 ${isScrolled ? 'h-16 md:h-[4.75rem]' : 'h-[4.75rem] md:h-[5.5rem]'}`}
           />
           <span className="hidden xl:inline-flex items-center gap-2 rounded-full border border-white/14 bg-black/15 px-3 py-1 text-[9px] uppercase tracking-[0.34em] text-white/78 transition-colors duration-300 group-hover:border-[#E2C97E]/35 group-hover:text-[#FFF3D0]">
             <Sparkles size={10} className="text-[#E2C97E]" />
