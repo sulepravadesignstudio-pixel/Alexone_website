@@ -1,13 +1,31 @@
 /**
- * Domains for partner logos. Primary: Clearbit logo CDN. Fallback: Google favicon service.
- * Domains chosen from each brand’s public site (India / global).
+ * Local partner logos (public/partners) — reliable when hosted.
+ * Remote CDNs (Clearbit etc.) often fail in production.
  */
+
+const PARTNER_LOCAL_LOGOS: Record<string, string> = {
+  Godrej: '/partners/godrej.svg',
+  Ebco: '/partners/ebco.svg',
+  Hettich: '/partners/hettich.svg',
+  Livspace: '/partners/livspace.svg',
+  Tandem: '/partners/tandem.svg',
+  Hafele: '/partners/hafele.svg',
+  Century: '/partners/century.svg',
+  'Green Panel': '/partners/green-panel.svg',
+  Austin: '/partners/austin.svg',
+  'Black Cobra': '/partners/black-cobra.svg',
+  VANM: '/partners/vanm.svg',
+  Airolam: '/partners/airolam.svg',
+  Fenesta: '/partners/fenesta.svg',
+  'Saint-Gobain': '/partners/saint-gobain.svg',
+};
+
+/** Domains kept for optional remote favicon fallback only. */
 export const PARTNER_LOGO_DOMAINS: Record<string, string> = {
   Godrej: 'godrejinterio.com',
   Ebco: 'ebco.in',
   Hettich: 'hettich.com',
   Livspace: 'livspace.com',
-  /** Tandem drawer systems — same group logo as Hettich in most Indian specs */
   Tandem: 'hettich.com',
   Hafele: 'hafele.com',
   Century: 'centuryply.com',
@@ -20,17 +38,8 @@ export const PARTNER_LOGO_DOMAINS: Record<string, string> = {
   'Saint-Gobain': 'saint-gobain.com',
 };
 
-/** High-quality logos from Wikimedia Commons (redirects to upload.wikimedia.org). */
-const WIKIMEDIA_LOGO: Partial<Record<string, string>> = {
-  Hettich:
-    'https://commons.wikimedia.org/wiki/Special:FilePath/Logo_of_Hettich_%28company%29.svg',
-  'Saint-Gobain': 'https://commons.wikimedia.org/wiki/Special:FilePath/Saint-Gobain_logo.svg',
-};
-
-export function partnerLogoClearbit(partner: string): string | null {
-  const domain = PARTNER_LOGO_DOMAINS[partner];
-  if (!domain) return null;
-  return `https://logo.clearbit.com/${domain}`;
+export function partnerLogoLocal(partner: string): string | null {
+  return PARTNER_LOCAL_LOGOS[partner] ?? null;
 }
 
 export function partnerLogoFavicon(partner: string): string | null {
@@ -39,7 +48,7 @@ export function partnerLogoFavicon(partner: string): string | null {
   return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
 }
 
-/** Prefer Commons vector where available, else Clearbit. */
+/** Prefer bundled local SVG, then favicon. */
 export function partnerLogoPrimary(partner: string): string | null {
-  return WIKIMEDIA_LOGO[partner] ?? partnerLogoClearbit(partner);
+  return partnerLogoLocal(partner) ?? partnerLogoFavicon(partner);
 }

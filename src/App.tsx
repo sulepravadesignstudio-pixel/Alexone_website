@@ -132,7 +132,7 @@ function FloatingSidebar({
       initial={{ opacity: 0, x: -40 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 1.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed left-0 top-1/2 z-[190] -translate-y-1/2 flex flex-col items-center"
+      className="fixed left-0 top-1/2 z-[190] hidden -translate-y-1/2 flex-col items-center md:flex"
       style={{
         background: 'linear-gradient(180deg, rgba(41,34,21,0.94) 0%, rgba(25,21,14,0.94) 55%, rgba(15,12,9,0.96) 100%)',
         borderRight: '1px solid rgba(226,201,126,0.34)',
@@ -250,6 +250,26 @@ export default function App() {
     setCurrentPage(page);
     window.history.replaceState({ page }, '', `#/${page}`);
   }, [hasEntered]);
+
+  /** Auto-open enquiry popup once, 10s after entering the main site. */
+  useEffect(() => {
+    if (!hasEntered) return;
+    if (sessionStorage.getItem('alexone-enquiry-auto') === '1') return;
+
+    const timer = window.setTimeout(() => {
+      if (sessionStorage.getItem('alexone-enquiry-auto') === '1') return;
+      setEnquiryOpen(true);
+      sessionStorage.setItem('alexone-enquiry-auto', '1');
+    }, 10000);
+
+    return () => window.clearTimeout(timer);
+  }, [hasEntered]);
+
+  useEffect(() => {
+    if (enquiryOpen) {
+      sessionStorage.setItem('alexone-enquiry-auto', '1');
+    }
+  }, [enquiryOpen]);
 
   useEffect(() => {
     injectOrganizationJsonLd();

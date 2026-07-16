@@ -33,6 +33,12 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Guard against horizontal scroll from decorative absolute elements.
+   `clip` (not `hidden`) keeps position:sticky working. */
+html, body {
+  overflow-x: clip;
+}
+
 /* Hide scrollbar but keep functionality */
 .no-scrollbar::-webkit-scrollbar {
   display: none;

@@ -7,6 +7,12 @@ import {
   Moon, DoorOpen, Layers, Zap, Circle, Target, Minus,
   Sun, Droplets, Settings2, Package, ArrowRight,
 } from 'lucide-react';
+import kitchen01 from '../assets/residential/kitchen-01.jpg';
+import kitchen02 from '../assets/residential/kitchen-02.jpg';
+import living01 from '../assets/residential/living-01.jpg';
+import living03 from '../assets/residential/living-03.jpg';
+import living06 from '../assets/residential/living-06.jpg';
+import living09 from '../assets/residential/living-09.jpg';
 
 /* ─── 3D tilt card ─────────────────────────────────────────────────────── */
 function TiltCard({ children, className = '', style = {} }: {
@@ -107,6 +113,60 @@ const TABS = [
   { label: 'Decor & Lighting' },
 ];
 
+const MATERIAL_HERO_IMAGES = [
+  kitchen01,
+  living06,
+  living01,
+];
+
+const SOLUTION_IMAGES: Record<string, string> = {
+  'Modular Kitchen': kitchen01,
+  Wardrobe: living09,
+  'TV Unit': living01,
+  'Crockery Unit': kitchen02,
+  'Vanity / Dressing Unit': living03,
+  'Headboard & Wall Panelling': living06,
+  'Bed Styles': living09,
+  'Doors & Windows': living01,
+  'Ceiling Solutions': kitchen01,
+};
+
+const MATERIAL_TYPE_IMAGES = [
+  living06,
+  kitchen01,
+  living01,
+  living03,
+  kitchen02,
+  living09,
+  living06,
+  kitchen01,
+  living01,
+  living03,
+  kitchen02,
+  living09,
+  living06,
+  kitchen01,
+  living01,
+  living03,
+];
+
+const DECOR_IMAGES: Record<string, string> = {
+  'Decor Items': living09,
+  'Profile Light': living06,
+  'Cylinder Light': living01,
+  'Focus Light': living03,
+  'Strip Light': kitchen01,
+  'Surface Light': kitchen02,
+  Fountain: living09,
+  Automation: living06,
+};
+
+const PILLAR_IMAGES = [
+  living06,
+  kitchen01,
+  living03,
+];
+
 export default function Materials() {
   const [activeTab, setActiveTab] = useState(0);
 
@@ -155,7 +215,7 @@ export default function Materials() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 className="font-serif font-medium leading-[1.02] mb-8"
-                style={{ fontSize: 'clamp(3.2rem, 7vw, 6.5rem)', color: '#1A1512' }}
+                style={{ fontSize: 'clamp(2.5rem, 7vw, 6.5rem)', color: '#1A1512' }}
               >
                 Materials<br /><span style={{ color: '#B8963A' }}>&</span> Finishes
               </motion.h1>
@@ -208,11 +268,15 @@ export default function Materials() {
               className="lg:col-span-6 relative hidden lg:block"
               style={{ height: '420px' }}
             >
-              {[
-                { src: 'https://images.unsplash.com/photo-1615873968403-89e068629265?auto=format&fit=crop&q=80&w=700', x: 0, y: 0, z: 0, rotate: -3 },
-                { src: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80&w=700', x: 60, y: -30, z: 1, rotate: 2 },
-                { src: 'https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&q=80&w=700', x: 120, y: 20, z: 2, rotate: -1 },
-              ].map((img, i) => (
+              {MATERIAL_HERO_IMAGES.map((src, i) => {
+                const positions = [
+                  { x: 0, y: 0, z: 0, rotate: -3 },
+                  { x: 60, y: -30, z: 1, rotate: 2 },
+                  { x: 120, y: 20, z: 2, rotate: -1 },
+                ];
+                const position = positions[i] ?? positions[0];
+                const img = { src, ...position };
+                return (
                 <motion.div
                   key={i}
                   className="absolute overflow-hidden"
@@ -230,7 +294,8 @@ export default function Materials() {
                 >
                   <img src={img.src} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                 </motion.div>
-              ))}
+                );
+              })}
             </motion.div>
           </div>
         </div>
@@ -305,7 +370,14 @@ export default function Materials() {
 
                         {/* BG image strip */}
                         <div className="relative h-36 overflow-hidden">
-                          <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, rgba(201,168,76,${0.12 + (idx % 3) * 0.04}), rgba(255,255,255,0.4))` }} />
+                          <img
+                            src={SOLUTION_IMAGES[item]}
+                            alt={item}
+                            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            referrerPolicy="no-referrer"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-r from-black/62 via-black/30 to-transparent" />
+                          <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, rgba(201,168,76,${0.1 + (idx % 3) * 0.03}), rgba(255,255,255,0.08))` }} />
                           {/* Icon in 3D depth */}
                           <div className="absolute left-8 top-1/2 -translate-y-1/2 w-16 h-16 rounded-2xl flex items-center justify-center" style={{ background: '#fff', boxShadow: '0 8px 28px rgba(201,168,76,0.18)', color: '#C9A84C', transform: 'translateZ(20px)' }}>
                             {meta.icon}
@@ -345,16 +417,20 @@ export default function Materials() {
                   >
                     <FlipCard
                       front={
-                        <div className="w-full h-full bg-white flex flex-col items-center justify-center p-3 gap-2" style={{ border: '1px solid rgba(201,168,76,0.18)', boxShadow: '0 2px 14px rgba(44,37,32,0.06)' }}>
-                          <div className="w-2 h-2 rounded-full" style={{ background: '#C9A84C', boxShadow: '0 0 8px rgba(201,168,76,0.5)' }} />
-                          <span className="text-center text-[11px] font-semibold uppercase tracking-[0.2em] leading-tight" style={{ color: '#2C2520' }}>{item}</span>
+                        <div className="relative w-full h-full overflow-hidden bg-white flex flex-col items-center justify-center p-3 gap-2" style={{ border: '1px solid rgba(201,168,76,0.18)', boxShadow: '0 2px 14px rgba(44,37,32,0.06)' }}>
+                          <img src={MATERIAL_TYPE_IMAGES[idx % MATERIAL_TYPE_IMAGES.length]} alt={item} className="absolute inset-0 h-full w-full object-cover" referrerPolicy="no-referrer" />
+                          <div className="absolute inset-0 bg-white/72 backdrop-blur-[1px]" />
+                          <div className="relative z-10 w-2 h-2 rounded-full" style={{ background: '#C9A84C', boxShadow: '0 0 8px rgba(201,168,76,0.5)' }} />
+                          <span className="relative z-10 text-center text-[11px] font-semibold uppercase tracking-[0.2em] leading-tight" style={{ color: '#2C2520' }}>{item}</span>
                         </div>
                       }
                       back={
-                        <div className="w-full h-full flex flex-col items-center justify-center p-3 gap-2" style={{ background: 'linear-gradient(135deg,#1C1714,#2C2520)', border: '1px solid rgba(201,168,76,0.3)' }}>
-                          <div className="w-6 h-px mb-1" style={{ background: '#C9A84C' }} />
-                          <span className="text-[11px] uppercase tracking-[0.2em] text-center font-medium leading-tight" style={{ color: '#E2C97E' }}>{item}</span>
-                          <span className="text-[9px] mt-1" style={{ color: 'rgba(201,168,76,0.5)' }}>✦ Available</span>
+                        <div className="relative w-full h-full overflow-hidden flex flex-col items-center justify-center p-3 gap-2" style={{ background: 'linear-gradient(135deg,#1C1714,#2C2520)', border: '1px solid rgba(201,168,76,0.3)' }}>
+                          <img src={MATERIAL_TYPE_IMAGES[idx % MATERIAL_TYPE_IMAGES.length]} alt="" className="absolute inset-0 h-full w-full object-cover opacity-35" referrerPolicy="no-referrer" />
+                          <div className="absolute inset-0 bg-[#1C1714]/70" />
+                          <div className="relative z-10 w-6 h-px mb-1" style={{ background: '#C9A84C' }} />
+                          <span className="relative z-10 text-[11px] uppercase tracking-[0.2em] text-center font-medium leading-tight" style={{ color: '#E2C97E' }}>{item}</span>
+                          <span className="relative z-10 text-[9px] mt-1" style={{ color: 'rgba(201,168,76,0.7)' }}>Available</span>
                         </div>
                       }
                     />
@@ -365,9 +441,9 @@ export default function Materials() {
               {/* pillars */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-20">
                 {[
-                  { title: 'Premium Quality',   img: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80&w=600' },
-                  { title: 'Locally Sourced',   img: 'https://images.unsplash.com/photo-1615529182904-14819c35db37?auto=format&fit=crop&q=80&w=600' },
-                  { title: 'Globally Inspired', img: 'https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&q=80&w=600' },
+                  { title: 'Premium Quality',   img: PILLAR_IMAGES[0] },
+                  { title: 'Locally Sourced',   img: PILLAR_IMAGES[1] },
+                  { title: 'Globally Inspired', img: PILLAR_IMAGES[2] },
                 ].map((p, i) => (
                   <TiltCard
                     key={p.title}
@@ -398,6 +474,7 @@ export default function Materials() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {MATERIALS.decorLighting.map((item, idx) => {
                   const meta = DECOR_META[item] ?? { icon: <Sparkles size={24} />, color: '#C9A84C' };
+                  const image = DECOR_IMAGES[item];
                   const tall = idx % 3 === 0;
                   return (
                     <TiltCard
@@ -420,18 +497,27 @@ export default function Materials() {
                         {/* corner glow */}
                         <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ background: `radial-gradient(circle,${meta.color}22 0%,transparent 70%)` }} />
 
-                        <div className={`flex flex-col justify-between ${tall ? 'p-10 min-h-[240px]' : 'p-8'}`}>
-                          <div
-                            className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-400 group-hover:scale-110 group-hover:rotate-3"
-                            style={{ background: `${meta.color}12`, color: meta.color, boxShadow: `0 4px 16px ${meta.color}20` }}
-                          >
-                            {meta.icon}
-                          </div>
-                          <div>
-                            <h4 className="font-serif text-xl font-medium mb-3" style={{ color: '#1A1512' }}>{item}</h4>
-                            <div className="flex items-center gap-2">
-                              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: meta.color }} />
-                              <span className="text-[9px] uppercase tracking-[0.35em]" style={{ color: `${meta.color}99` }}>Available</span>
+                        <div className={`relative overflow-hidden ${tall ? 'min-h-[340px]' : 'min-h-[250px]'}`}>
+                          <img
+                            src={image}
+                            alt={item}
+                            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            referrerPolicy="no-referrer"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/70 to-white/8" />
+                          <div className="relative z-10 flex h-full flex-col justify-between p-8">
+                            <div
+                              className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-400 group-hover:scale-110 group-hover:rotate-3"
+                              style={{ background: '#fff', color: meta.color, boxShadow: `0 8px 24px ${meta.color}28` }}
+                            >
+                              {meta.icon}
+                            </div>
+                            <div>
+                              <h4 className="font-serif text-xl font-medium mb-3" style={{ color: '#1A1512' }}>{item}</h4>
+                              <div className="flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: meta.color }} />
+                                <span className="text-[9px] uppercase tracking-[0.35em]" style={{ color: `${meta.color}99` }}>Available</span>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -450,10 +536,10 @@ export default function Materials() {
                   className="grid grid-cols-1 lg:grid-cols-2 overflow-hidden"
                 >
                   <div className="relative overflow-hidden hidden lg:block" style={{ minHeight: '240px' }}>
-                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&q=80&w=900" alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                    <img src={living06} alt="" className="w-full h-full object-cover" />
                     <div className="absolute inset-0" style={{ background: 'linear-gradient(to right,transparent 50%,#FFF9F2)' }} />
                   </div>
-                  <div className="relative flex flex-col justify-center bg-white p-14" style={{ borderLeft: '1px solid rgba(201,168,76,0.2)' }}>
+                  <div className="relative flex flex-col justify-center bg-white p-8 md:p-14" style={{ borderLeft: '1px solid rgba(201,168,76,0.2)' }}>
                     <div className="absolute top-0 left-0 h-full w-0.5" style={{ background: 'linear-gradient(to bottom,#C9A84C,rgba(201,168,76,0.1))' }} />
                     <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.42em]" style={{ color: '#9A7324' }}>Custom Selection</p>
                     <h3 className="mb-4 font-serif text-3xl font-medium leading-snug" style={{ color: '#1A1512' }}>Want a bespoke<br />material board?</h3>

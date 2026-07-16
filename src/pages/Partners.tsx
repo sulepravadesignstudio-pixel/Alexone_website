@@ -1,11 +1,11 @@
 import { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from 'motion/react';
 import { RAIL_TEXT_INSET } from '../layoutRail';
-import { partnerLogoFavicon, partnerLogoPrimary } from '../partnerLogos';
+import { partnerLogoFavicon, partnerLogoLocal, partnerLogoPrimary } from '../partnerLogos';
 import { MATERIALS } from '../constants';
 import { ArrowRight, Award, Shield, Zap, Star } from 'lucide-react';
 
-/** Brand mark: Wikimedia / Clearbit → favicon → initials */
+/** Brand mark: local SVG → favicon → initials */
 function PartnerLogoImage({
   partner,
   catColor,
@@ -21,14 +21,18 @@ function PartnerLogoImage({
     .join('')
     .slice(0, 2)
     .toUpperCase();
-  const sources = [partnerLogoPrimary(partner), partnerLogoFavicon(partner)].filter((u): u is string => !!u);
+  const sources = [
+    partnerLogoLocal(partner),
+    partnerLogoPrimary(partner),
+    partnerLogoFavicon(partner),
+  ].filter((u, i, arr): u is string => !!u && arr.indexOf(u) === i);
   const [srcIdx, setSrcIdx] = useState(0);
 
-  const boxW = size === 'lg' ? 'min-w-[160px] max-w-[180px]' : size === 'sm' ? 'min-w-[72px] max-w-[100px]' : 'min-w-[100px] max-w-[140px]';
-  const boxH = size === 'lg' ? 'h-[72px]' : size === 'sm' ? 'h-10' : 'h-14';
+  const boxW = size === 'lg' ? 'min-w-[168px] max-w-[200px]' : size === 'sm' ? 'min-w-[88px] max-w-[120px]' : 'w-full max-w-[160px] sm:w-auto sm:min-w-[120px]';
+  const boxH = size === 'lg' ? 'h-[80px]' : size === 'sm' ? 'h-12' : 'h-16';
 
   if (srcIdx >= sources.length) {
-    const wh = size === 'sm' ? 'h-9 w-9 text-sm' : 'h-14 w-14 text-xl';
+    const wh = size === 'sm' ? 'h-10 w-10 text-sm' : 'h-14 w-14 text-xl';
     return (
       <div
         className={`rounded-2xl flex items-center justify-center font-serif transition-all duration-400 group-hover:scale-110 group-hover:rotate-3 shrink-0 ${wh}`}
@@ -45,15 +49,17 @@ function PartnerLogoImage({
   }
 
   return (
-    <div className={`flex items-center justify-center ${boxH} ${boxW} mx-auto`}>
+    <div
+      className={`flex items-center justify-center ${boxH} ${boxW} mx-auto rounded-xl bg-white px-3 py-2 shadow-[0_2px_12px_rgba(0,0,0,0.06)]`}
+      style={{ border: '1px solid rgba(44,37,32,0.08)' }}
+    >
       <img
         src={sources[srcIdx]}
-        alt=""
-        className="max-h-full max-w-full object-contain object-center opacity-[0.92] group-hover:opacity-100 transition-all duration-300"
+        alt={`${partner} logo`}
+        className="max-h-full max-w-full object-contain object-center opacity-100 transition-all duration-300 group-hover:scale-[1.03]"
         onError={() => setSrcIdx((i) => i + 1)}
         loading="lazy"
         decoding="async"
-        referrerPolicy="no-referrer"
       />
     </div>
   );
@@ -154,7 +160,7 @@ export default function Partners() {
 
               <motion.h1 initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 className="font-serif font-light leading-[1.02] mb-8"
-                style={{ fontSize: 'clamp(3rem, 7vw, 6.5rem)', color: '#1C1714' }}>
+                style={{ fontSize: 'clamp(2.5rem, 7vw, 6.5rem)', color: '#1C1714' }}>
                 Our Brand<br /><span style={{ color: '#C9A84C' }}>Partners</span>
               </motion.h1>
 
@@ -295,7 +301,7 @@ export default function Partners() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.05, ease: [0.22, 1, 0.36, 1] }}
-                    className="flex flex-col items-center justify-center gap-4 p-8"
+                    className="flex flex-col items-center justify-center gap-4 p-5 sm:p-8"
                     style={{ minHeight: '160px' }}
                   >
                     {/* shimmer top line */}
@@ -397,7 +403,7 @@ export default function Partners() {
             </div>
 
             {/* content panel */}
-            <div className="relative bg-white p-14 flex flex-col justify-center" style={{ borderLeft: '1px solid rgba(201,168,76,0.15)' }}>
+            <div className="relative bg-white p-8 md:p-14 flex flex-col justify-center" style={{ borderLeft: '1px solid rgba(201,168,76,0.15)' }}>
               <div className="absolute top-0 left-0 h-full w-0.5" style={{ background: 'linear-gradient(to bottom,#C9A84C,rgba(201,168,76,0.1))' }} />
 
               <p className="text-[10px] uppercase tracking-[0.45em] mb-4" style={{ color: '#C9A84C' }}>Grow Together</p>

@@ -1,6 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react';
-import { useState } from 'react';
-import preloaderArt from '../assets/preloader-art-nobg.png';
+import { useCallback, useEffect, useState } from 'react';
 import { RESIDENTIAL_ENTRY_STACK, RESIDENTIAL_HERO_IMAGE } from '../constants';
 
 const BRAND = 'ALEXONE'.split('');
@@ -13,10 +12,16 @@ interface EntryScreenProps {
 export default function EntryScreen({ onEnter }: EntryScreenProps) {
   const [exiting, setExiting] = useState(false);
 
-  const handleEnter = () => {
+  const handleEnter = useCallback(() => {
+    if (exiting) return;
     setExiting(true);
-    setTimeout(onEnter, 900);
-  };
+    window.setTimeout(onEnter, 900);
+  }, [exiting, onEnter]);
+
+  useEffect(() => {
+    const autoEnterTimer = window.setTimeout(handleEnter, 10000);
+    return () => window.clearTimeout(autoEnterTimer);
+  }, [handleEnter]);
 
   const heroCard = RESIDENTIAL_ENTRY_STACK[0];
   const secondaryCards = RESIDENTIAL_ENTRY_STACK.slice(1);
@@ -94,35 +99,29 @@ export default function EntryScreen({ onEnter }: EntryScreenProps) {
             </div>
           </motion.div>
 
-          <div className="relative z-10 mx-auto flex h-full w-full max-w-[1440px] items-center px-6 py-16 md:px-10 lg:px-14">
-            <div className="grid w-full items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(360px,520px)] xl:gap-20">
+          <div className="relative z-10 mx-auto flex h-full w-full max-w-[1440px] items-start overflow-y-auto px-6 pb-28 pt-10 sm:items-center sm:overflow-visible sm:py-16 md:px-10 lg:px-14">
+            <div className="grid w-full items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(360px,520px)] lg:gap-12 xl:gap-20">
               <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
                 <motion.p
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.7, delay: 0.15 }}
-                  className="mb-5 text-[10px] uppercase tracking-[0.48em] text-[#E2C97E]/85"
+                  className="mb-4 text-[10px] uppercase tracking-[0.48em] text-[#E2C97E]/85 sm:mb-5"
                 >
                   Interior and Exterior Studio
                 </motion.p>
 
                 <motion.img
-                  src={preloaderArt}
-                  alt="Alexone"
+                  src="/favicon-removebg-preview.png"
+                  alt="Alexone logo"
                   initial={{ opacity: 0, y: -24, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   transition={{ duration: 0.8, delay: 0.25 }}
-                  style={{
-                    width: 140,
-                    height: 140,
-                    objectFit: 'contain',
-                    marginBottom: '0.5rem',
-                    filter: 'drop-shadow(0 0 24px rgba(201,168,76,0.45))',
-                  }}
+                  className="mb-5 h-[5.5rem] w-auto max-w-[min(92vw,420px)] object-contain drop-shadow-[0_12px_40px_rgba(0,0,0,0.55)] sm:mb-6 sm:h-[6.5rem] md:h-[7.5rem]"
                 />
 
                 <div
-                  className="relative mb-4 flex flex-wrap items-end justify-center overflow-hidden lg:justify-start"
+                  className="relative mb-3 flex flex-wrap items-end justify-center overflow-hidden sm:mb-4 lg:justify-start"
                   style={{ gap: '0.02em' }}
                 >
                   {BRAND.map((letter, i) => (
@@ -137,7 +136,7 @@ export default function EntryScreen({ onEnter }: EntryScreenProps) {
                       }}
                       style={{
                         fontFamily: 'Cormorant Garamond, Georgia, serif',
-                        fontSize: 'clamp(3.4rem, 10vw, 7.75rem)',
+                        fontSize: 'clamp(2.6rem, 11vw, 7.75rem)',
                         fontWeight: 300,
                         letterSpacing: '0.14em',
                         color: '#ffffff',
@@ -159,7 +158,7 @@ export default function EntryScreen({ onEnter }: EntryScreenProps) {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.9, delay: 1.2 }}
-                  className="mb-6 text-[11px] uppercase font-light text-[#E2C97E]"
+                  className="mb-4 text-[10px] uppercase font-light text-[#E2C97E] sm:mb-6 sm:text-[11px]"
                   style={{ letterSpacing: '0.35em' }}
                 >
                   By Suleprava Interior &amp; Exterior Design
@@ -169,8 +168,8 @@ export default function EntryScreen({ onEnter }: EntryScreenProps) {
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 1.35 }}
-                  className="mb-10 max-w-xl text-white/70 font-light leading-relaxed"
-                  style={{ fontSize: 'clamp(0.9rem, 1.4vw, 1.08rem)' }}
+                  className="mb-6 max-w-xl text-white/70 font-light leading-relaxed sm:mb-10"
+                  style={{ fontSize: 'clamp(0.88rem, 1.4vw, 1.08rem)' }}
                 >
                   Step into a cinematic residential showcase shaped from your own design renders,
                   with a sharper composition, bolder movement, and a more premium first impression.
@@ -180,15 +179,15 @@ export default function EntryScreen({ onEnter }: EntryScreenProps) {
                   initial={{ opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 1.55 }}
-                  className="mb-10 flex flex-wrap justify-center gap-3 lg:justify-start"
+                  className="mb-6 flex flex-wrap justify-center gap-2 sm:mb-10 sm:gap-3 lg:justify-start"
                 >
-                  <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-white/65 backdrop-blur-md">
+                  <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[9px] uppercase tracking-[0.28em] text-white/65 backdrop-blur-md sm:px-4 sm:py-2 sm:text-[10px]">
                     Bespoke Interiors
                   </div>
-                  <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-white/65 backdrop-blur-md">
+                  <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[9px] uppercase tracking-[0.28em] text-white/65 backdrop-blur-md sm:px-4 sm:py-2 sm:text-[10px]">
                     Premium Execution
                   </div>
-                  <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-white/65 backdrop-blur-md">
+                  <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[9px] uppercase tracking-[0.28em] text-white/65 backdrop-blur-md sm:px-4 sm:py-2 sm:text-[10px]">
                     3D Visual Journey
                   </div>
                 </motion.div>
@@ -197,20 +196,12 @@ export default function EntryScreen({ onEnter }: EntryScreenProps) {
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.7, delay: 1.8 }}
-                  whileHover={{ scale: 1.04 }}
+                  whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={handleEnter}
-                  className="group relative overflow-hidden border border-white/30 px-14 py-4 text-xs uppercase tracking-[0.45em] text-white transition-colors duration-500 hover:border-[#E2C97E]/80"
+                  className="group relative z-30 w-full max-w-sm overflow-hidden border-2 border-[#E2C97E] bg-[#C9A84C] px-8 py-4 text-[11px] font-medium uppercase tracking-[0.28em] text-[#1a1a12] shadow-[0_12px_40px_rgba(0,0,0,0.45)] transition-colors duration-300 hover:bg-[#E2C97E] sm:w-auto sm:px-14 sm:py-4 sm:text-xs sm:tracking-[0.4em]"
                 >
-                  <span className="relative z-10 transition-colors duration-500 group-hover:text-white">
-                    Enter the Experience
-                  </span>
-                  <motion.div
-                    initial={{ x: '-100%' }}
-                    whileHover={{ x: 0 }}
-                    transition={{ duration: 0.45, ease: 'easeInOut' }}
-                    className="absolute inset-0 bg-[#C9A84C]"
-                  />
+                  <span className="relative z-10">Enter the Experience</span>
                 </motion.button>
               </div>
 

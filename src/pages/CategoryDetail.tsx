@@ -71,7 +71,7 @@ export default function CategoryDetail({ categoryId, onNavigate }: CategoryDetai
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             className="font-serif text-white leading-tight"
-            style={{ fontSize: 'clamp(2.8rem, 7vw, 6rem)', fontWeight: 300 }}
+            style={{ fontSize: 'clamp(2.2rem, 7vw, 6rem)', fontWeight: 300 }}
           >
             {category.title} Design
           </motion.h1>

@@ -55,7 +55,7 @@ export default function Navbar({ onNavigate, currentPage, onGoBack, onOpenEnquir
           <img
             src="/favicon-removebg-preview.png"
             alt="Alexone"
-            className={`object-contain transition-all duration-300 ${isScrolled ? 'h-12 md:h-14' : 'h-14 md:h-[5rem]'}`}
+            className={`object-contain transition-all duration-300 ${isScrolled ? 'h-14 md:h-16' : 'h-16 md:h-[4.75rem]'}`}
           />
           <span className="hidden xl:inline-flex items-center gap-2 rounded-full border border-white/14 bg-black/15 px-3 py-1 text-[9px] uppercase tracking-[0.34em] text-white/78 transition-colors duration-300 group-hover:border-[#E2C97E]/35 group-hover:text-[#FFF3D0]">
             <Sparkles size={10} className="text-[#E2C97E]" />
@@ -105,7 +105,7 @@ export default function Navbar({ onNavigate, currentPage, onGoBack, onOpenEnquir
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.55 }}
             onClick={() => onOpenEnquiry()}
-            className="ml-4 rounded-full border border-[#E2C97E]/55 bg-black/12 px-5 py-2.5 text-[10px] font-medium uppercase tracking-[0.32em] text-[#FFF3D0] transition-all duration-300 hover:bg-[#C9A84C] hover:text-[#1a2108] hover:border-[#C9A84C] hover:shadow-[0_10px_26px_rgba(201,168,76,0.22)]"
+            className="ml-4 rounded-full border-2 border-[#E2C97E] bg-[#C9A84C] px-6 py-2.5 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#1a2108] shadow-[0_8px_24px_rgba(0,0,0,0.28)] transition-all duration-300 hover:bg-[#E2C97E] hover:border-[#E2C97E] hover:shadow-[0_10px_26px_rgba(201,168,76,0.35)]"
           >
             Enquire
           </motion.button>
@@ -123,7 +123,9 @@ export default function Navbar({ onNavigate, currentPage, onGoBack, onOpenEnquir
         <div className="md:hidden">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="rounded-full border border-white/14 bg-black/12 p-2 text-white/90 transition-colors hover:text-[#FFF3D0]"
+            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isMobileMenuOpen}
+            className="rounded-full border border-white/14 bg-black/12 p-2.5 text-white/90 transition-colors hover:text-[#FFF3D0]"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -167,7 +169,7 @@ export default function Navbar({ onNavigate, currentPage, onGoBack, onOpenEnquir
                   onOpenEnquiry();
                   setIsMobileMenuOpen(false);
                 }}
-                className="mt-2 w-full rounded-full border border-[#E2C97E]/55 bg-black/12 py-3.5 text-center text-[10px] font-medium uppercase tracking-[0.32em] text-[#FFF3D0] transition-colors hover:bg-[#C9A84C]/90 hover:text-[#1a2108]"
+                className="mt-2 w-full rounded-full border-2 border-[#E2C97E] bg-[#C9A84C] py-3.5 text-center text-[11px] font-semibold uppercase tracking-[0.28em] text-[#1a2108] transition-colors hover:bg-[#E2C97E]"
               >
                 Enquire
               </button>

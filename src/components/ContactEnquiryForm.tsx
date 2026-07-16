@@ -38,7 +38,7 @@ export default function ContactEnquiryForm({ idPrefix = 'enquiry', onSuccess }: 
     });
     setSubmitting(false);
 
-    if (!result.ok) {
+    if (result.ok === false) {
       setError(result.error);
       return;
     }
@@ -74,7 +74,7 @@ export default function ContactEnquiryForm({ idPrefix = 'enquiry', onSuccess }: 
             autoComplete="name"
             value={name}
             onChange={(ev) => setName(ev.target.value)}
-            className="w-full border-b border-luxury-charcoal/20 bg-transparent py-3 text-luxury-charcoal outline-none transition-colors focus:border-luxury-gold"
+            className="w-full rounded-sm border border-luxury-charcoal/12 bg-white/70 px-4 py-3.5 text-luxury-charcoal outline-none transition-all placeholder:text-luxury-charcoal/35 focus:border-luxury-gold focus:bg-white focus:shadow-[0_0_0_3px_rgba(201,168,76,0.08)]"
             placeholder="John Doe"
             disabled={submitting}
           />
@@ -90,7 +90,7 @@ export default function ContactEnquiryForm({ idPrefix = 'enquiry', onSuccess }: 
             autoComplete="tel"
             value={phone}
             onChange={(ev) => setPhone(ev.target.value)}
-            className="w-full border-b border-luxury-charcoal/20 bg-transparent py-3 text-luxury-charcoal outline-none transition-colors focus:border-luxury-gold"
+            className="w-full rounded-sm border border-luxury-charcoal/12 bg-white/70 px-4 py-3.5 text-luxury-charcoal outline-none transition-all placeholder:text-luxury-charcoal/35 focus:border-luxury-gold focus:bg-white focus:shadow-[0_0_0_3px_rgba(201,168,76,0.08)]"
             placeholder="+91 00000 00000"
             disabled={submitting}
           />
@@ -108,7 +108,7 @@ export default function ContactEnquiryForm({ idPrefix = 'enquiry', onSuccess }: 
           autoComplete="email"
           value={email}
           onChange={(ev) => setEmail(ev.target.value)}
-          className="w-full border-b border-luxury-charcoal/20 bg-transparent py-3 text-luxury-charcoal outline-none transition-colors focus:border-luxury-gold"
+          className="w-full rounded-sm border border-luxury-charcoal/12 bg-white/70 px-4 py-3.5 text-luxury-charcoal outline-none transition-all placeholder:text-luxury-charcoal/35 focus:border-luxury-gold focus:bg-white focus:shadow-[0_0_0_3px_rgba(201,168,76,0.08)]"
           placeholder="john@example.com"
           disabled={submitting}
         />
@@ -123,7 +123,7 @@ export default function ContactEnquiryForm({ idPrefix = 'enquiry', onSuccess }: 
           name="projectType"
           value={projectType}
           onChange={(ev) => setProjectType(ev.target.value)}
-          className="w-full appearance-none border-b border-luxury-charcoal/20 bg-transparent py-3 text-luxury-charcoal outline-none transition-colors focus:border-luxury-gold disabled:opacity-60"
+          className="w-full appearance-none rounded-sm border border-luxury-charcoal/12 bg-white/70 px-4 py-3.5 text-luxury-charcoal outline-none transition-all focus:border-luxury-gold focus:bg-white focus:shadow-[0_0_0_3px_rgba(201,168,76,0.08)] disabled:opacity-60"
           disabled={submitting}
         >
           <option value="" className="bg-white text-luxury-charcoal/50">
@@ -147,7 +147,7 @@ export default function ContactEnquiryForm({ idPrefix = 'enquiry', onSuccess }: 
           rows={4}
           value={message}
           onChange={(ev) => setMessage(ev.target.value)}
-          className="w-full resize-none border-b border-luxury-charcoal/20 bg-transparent py-3 text-luxury-charcoal outline-none transition-colors focus:border-luxury-gold"
+          className="w-full resize-none rounded-sm border border-luxury-charcoal/12 bg-white/70 px-4 py-3.5 text-luxury-charcoal outline-none transition-all placeholder:text-luxury-charcoal/35 focus:border-luxury-gold focus:bg-white focus:shadow-[0_0_0_3px_rgba(201,168,76,0.08)]"
           placeholder="Tell us about your vision..."
           disabled={submitting}
         />
@@ -156,7 +156,7 @@ export default function ContactEnquiryForm({ idPrefix = 'enquiry', onSuccess }: 
       <button
         type="submit"
         disabled={submitting}
-        className="mt-8 w-full bg-luxury-gold py-5 text-xs uppercase tracking-[0.4em] text-white transition-all duration-500 hover:bg-luxury-charcoal disabled:cursor-not-allowed disabled:opacity-70"
+        className="mt-8 w-full border border-[#E2C97E]/40 bg-[#C9A84C] py-5 text-xs font-semibold uppercase tracking-[0.36em] text-[#1a2108] shadow-[0_12px_32px_rgba(201,168,76,0.28)] transition-all duration-400 hover:bg-[#E2C97E] hover:shadow-[0_14px_36px_rgba(201,168,76,0.35)] disabled:cursor-not-allowed disabled:opacity-70"
       >
         {submitting ? 'Sending…' : 'Send Enquiry'}
       </button>

@@ -42,7 +42,7 @@ export default function Footer({ onNavigate }: FooterProps) {
         >
           <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
             <div className={`max-w-2xl ${RAIL_TEXT_INSET}`}>
-              <img src={alexoneWordmark} alt="Alexone" className="h-10 w-auto md:h-12" />
+              <img src={alexoneWordmark} alt="Alexone" className="h-14 w-auto md:h-16" />
               <p className="mt-6 max-w-xl text-base leading-relaxed text-white/68">
                 Premium interior, exterior, and landscape stories designed to feel immersive, refined,
                 and unforgettable from the first impression to the final detail.

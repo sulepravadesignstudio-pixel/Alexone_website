@@ -78,7 +78,7 @@ export default function Home({ onNavigate }: HomeProps) {
               <img
                 src={alexoneWordmark}
                 alt="Alexone"
-                className="h-10 w-auto md:h-12"
+                className="h-14 w-auto drop-shadow-[0_8px_28px_rgba(0,0,0,0.55)] md:h-20"
               />
             </motion.div>
 
@@ -87,7 +87,7 @@ export default function Home({ onNavigate }: HomeProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.55, duration: 1, ease: [0.22, 1, 0.36, 1] }}
               className="mb-7 max-w-4xl font-serif leading-[0.95] text-white"
-              style={{ fontSize: 'clamp(3.2rem, 7.7vw, 7rem)', fontWeight: 400 }}
+              style={{ fontSize: 'clamp(2.5rem, 7.7vw, 7rem)', fontWeight: 400 }}
             >
               Designing Spaces
               <br />
@@ -622,13 +622,13 @@ export default function Home({ onNavigate }: HomeProps) {
             <div className="flex flex-col md:flex-row items-center justify-center gap-5">
               <button
                 onClick={() => onNavigate('contact')}
-                className="px-14 py-5 bg-[#2C2520] text-white text-xs uppercase tracking-[0.32em] hover:bg-[#C9A84C] transition-all duration-400 font-medium"
+                className="px-10 md:px-14 py-5 bg-[#2C2520] text-white text-xs uppercase tracking-[0.32em] hover:bg-[#C9A84C] transition-all duration-400 font-medium"
               >
                 Get in Touch
               </button>
               <button
                 onClick={() => onNavigate('contact')}
-                className="px-14 py-5 border border-[#2C2520]/30 text-[#2C2520] text-xs uppercase tracking-[0.32em] hover:bg-[#2C2520] hover:text-white transition-all duration-400"
+                className="px-10 md:px-14 py-5 border border-[#2C2520]/30 text-[#2C2520] text-xs uppercase tracking-[0.32em] hover:bg-[#2C2520] hover:text-white transition-all duration-400"
               >
                 Book Consultation
               </button>
